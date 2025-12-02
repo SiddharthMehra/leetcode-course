@@ -12,4 +12,7 @@ def check_for_target(nums, target):
             right-=1
     
     return False
+
+#Time complexity: O(N)
+#space complexity: O(1)
         
