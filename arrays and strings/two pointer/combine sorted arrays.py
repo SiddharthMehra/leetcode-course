@@ -17,3 +17,8 @@ def combine(arr1, arr2):
     while j<len(arr2):
         ans.append(arr2[j])
         j+=1
+    
+    return ans
+
+# Time Complexity: O(N)
+# Space Complexity: O(1)
