@@ -1,0 +1,29 @@
+class Solution:
+    def minTaps(self, n: int, ranges: List[int]) -> int:
+
+        max_reach = [0] * (n+1)
+
+        for i in range(len(ranges)):
+            start = max(0, i-ranges[i])
+            end  = min(n, i+ranges[i])
+
+            max_reach[start] = max(max_reach[start], end)
+        
+        taps = 0
+        #current rightmost position reached
+        curr_end = 0
+
+        #next rightmost position that can be reached
+        next_end = 0
+
+        for i in range(n+1):
+            if i>next_end:
+                #current position cannot be reached
+                return -1
+            
+            if i>curr_end:
+                taps+=1
+                curr_end = next_end
+            next_end = max(next_end, max_reach[i])
+        
+        return taps
