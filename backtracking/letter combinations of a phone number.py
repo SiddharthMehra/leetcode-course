@@ -14,15 +14,17 @@ class Solution:
             "9": "wxyz"
         }
         
-        def backtrack(i, currStr):
-            if len(currStr) == len(digits):
-                ans.append(currStr)
+        def backtrack(i, curr):
+            if len(curr) == len(digits):
+                ans.append("".join(curr))
                 return
             
             for c in hashmap[digits[i]]:
-                backtrack(i+1, currStr + c)
+                curr.append(c)
+                backtrack(i+1, curr)
+                curr.pop()
         
         ans = []
-        backtrack(0, "")
+        backtrack(0, [])
         return ans
         
