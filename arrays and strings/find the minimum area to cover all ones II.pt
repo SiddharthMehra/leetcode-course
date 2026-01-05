@@ -1,0 +1,98 @@
+class Solution:
+    def minimumSum(self, grid: List[List[int]]) -> int:
+        m, n = len(grid), len(grid[0])
+        INF = math.inf
+
+        ones = [(r,c) for r in range(m) for c in range(n) if grid[r][c]==1]
+
+        def area(points):
+            if not points:
+                return INF
+            
+            min_r = min(r for r,c in points)
+            max_r = max(r for r,c in points )
+            min_c = min(c for r,c in points)
+            max_c = max(c for r,c in points)
+
+            return (max_r - min_r+1) * (max_c-min_c+1)
+
+        ans = INF
+        
+        #Case 1: three vertical rectangles
+        for c1 in range(n):
+            for c2 in range(c1+1, n):
+                A,B,C = [], [], []
+                for r,c in ones:
+                    if c<=c1:
+                        A.append((r,c))
+                    
+                    elif c<=c2:
+                        B.append((r,c))
+                    
+                    else:
+                        C.append((r,c))
+                
+                ans = min(ans, area(A) + area(B) + area(C))
+        
+        #Case2: three horizontal rectangles
+        for r1 in range(m):
+            for r2 in range(r1+1, m):
+                A,B,C = [], [], []
+                for r,c in ones:
+                    if r<=r1:
+                        A.append((r,c))
+                    elif r<=r2:
+                        B.append((r,c))
+                    else:
+                        C.append((r,c))
+
+                ans = min(ans, area(A) + area(B) + area(C))
+            
+        #Case 3a: vertical split, then horizontal on right
+        for c in range(n):
+            left = [(r, col) for r, col in ones if col<=c]
+            right = [(r, col) for r, col in ones if col>c]
+
+            for r in range(m):
+                top = [(rr, cc) for rr, cc in right if rr<=r]
+                bottom = [(rr, cc) for rr, cc in right if rr>r]
+                ans = min(ans, area(left) + area(top) + area(bottom))
+        
+        #Case 3b: horizontal split, then vertical on bottom
+        for r in range(m):
+            top = [(rr, cc) for rr,cc in ones if rr<=r]
+            bottom = [(rr, cc) for rr,cc in ones if rr>r]
+            for c in range(n):
+                left = [(rr, cc) for rr, cc in bottom if cc<=c]
+                right = [(rr, cc) for rr, cc in bottom if cc>c]
+                ans = min(ans, area(top) + area(left) + area(right))
+        
+
+        # Case 3c: vertical split, then horizontal on left
+        for c in range(n):
+            left = [(r, col) for r, col in ones if col <= c]
+            right = [(r, col) for r, col in ones if col > c]
+
+            for r in range(m):
+                top = [(rr, cc) for rr, cc in left if rr <= r]
+                bottom = [(rr, cc) for rr, cc in left if rr > r]
+
+                ans = min(ans, area(top) + area(bottom) + area(right))
+        
+        # Case 3d: horizontal split, then vertical on top
+        for r in range(m):
+            top = [(rr, cc) for rr, cc in ones if rr <= r]
+            bottom = [(rr, cc) for rr, cc in ones if rr > r]
+
+            for c in range(n):
+                left = [(rr, cc) for rr, cc in top if cc <= c]
+                right = [(rr, cc) for rr, cc in top if cc > c]
+
+                ans = min(ans, area(left) + area(right) + area(bottom))
+        
+        return ans
+
+
+        
+
+        
